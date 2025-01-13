@@ -31,20 +31,17 @@ function gameboard() {
   return { getBoard, placeMarker, printBoard };
 }
 
-function gameController() {
-  const playerOneName = "Bob";
-  const playerTwoName = "John";
-
+function gameController(playerOneName, playerTwoName, marker1, marker2) {
   const board = gameboard();
 
   const players = [
     {
       name: playerOneName,
-      marker: "O",
+      marker: marker1,
     },
     {
       name: playerTwoName,
-      marker: "X",
+      marker: marker2,
     },
   ];
 
@@ -141,15 +138,51 @@ function gameController() {
 }
 
 function screenController() {
-  const game = gameController();
   const form = document.querySelector(".init-input");
+  const board = document.querySelector(".board");
+  const marker1 = document.getElementById("marker-p1");
+  const marker2 = document.getElementById("marker-p2");
+  const cells = document.querySelectorAll(".board-cell");
+  let playerOneName;
+  let playerTwoName;
+  let game;
+  form.addEventListener("click", (e) => {
+    if (e.target.classList.contains("marker-select-btn")) {
+      marker1.textContent = marker1.textContent === "O" ? "X" : "O";
+      marker2.textContent = marker2.textContent === "X" ? "O" : "X";
+    }
+  });
   form.addEventListener("submit", (e) => {
     e.preventDefault();
-    const playerOneName = document.getElementById("player1-name").value;
-    const playerTwoName = document.getElementById("player2-name").value;
+    playerOneName = document.getElementById("player1-name").value;
+    playerTwoName = document.getElementById("player2-name").value;
+    game = gameController(
+      playerOneName,
+      playerTwoName,
+      marker1.textContent.trim(),
+      marker2.textContent.trim()
+    );
+    form.classList.add("hidden");
+    board.classList.remove("hidden");
+    board.classList.add("grid");
+    console.log(game.getActivePlayer());
   });
+  cells.forEach((cell) =>
+    cell.addEventListener("mouseover", () => {
+      cell.textContent =
+        cell.textContent === ""
+          ? game.getActivePlayer().marker
+          : cell.textContent;
+    })
+  );
+  cells.forEach((cell) =>
+    cell.addEventListener("mouseout", () => {
+      cell.textContent = cell.textContent !== "" ? cell.textContent : "";
+    })
+  );
 }
 
-while (!game.checkWin(game.getBoard()) && !game.checkDraw(game.getBoard())) {
-  game.playRound();
-}
+// while (!game.checkWin(game.getBoard()) && !game.checkDraw(game.getBoard())) {
+//   game.playRound();
+// }
+screenController();
