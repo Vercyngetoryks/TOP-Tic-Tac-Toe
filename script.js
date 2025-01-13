@@ -131,10 +131,24 @@ function gameController() {
     }
   };
 
-  return { getBoard: board.getBoard, checkWin, checkDraw, playRound };
+  return {
+    getBoard: board.getBoard,
+    checkWin,
+    checkDraw,
+    playRound,
+    getActivePlayer,
+  };
 }
 
-const game = gameController();
+function screenController() {
+  const game = gameController();
+  const form = document.querySelector(".init-input");
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const playerOneName = document.getElementById("player1-name").value;
+    const playerTwoName = document.getElementById("player2-name").value;
+  });
+}
 
 while (!game.checkWin(game.getBoard()) && !game.checkDraw(game.getBoard())) {
   game.playRound();

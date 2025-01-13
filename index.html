@@ -5,7 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./styles.css" />
     <title>Document</title>
-    <script defer src="./script.js"></script>
+    <!-- <script defer src="./script.js"></script> -->
   </head>
-  <body></body>
+  <body>
+    <header class="header">
+      <h1>Let's play Tic-Tac-Toe</h1>
+    </header>
+    <main>
+      <div class="container">
+        <form action="#" class="init-input">
+          <div class="player-info">
+            <div>
+              <label for="player1-name">Player-1 name:</label>
+              <input type="text" id="player1-name" required />
+            </div>
+            <div>
+              <label for="player2-name">Player-2 name:</label>
+              <input type="text" id="player2-name" required />
+            </div>
+          </div>
+          <div class="marker-select">
+            <div>
+              <span> Player-1: </span>
+              <button class="marker-select-btn">X</button>
+            </div>
+            <div>
+              <span>Player-2:</span>
+              <button class="marker-select-btn">O</button>
+            </div>
+          </div>
+          <button class="play-btn" type="submit">Play!</button>
+        </form>
+      </div>
+    </main>
+  </body>
 </html>
