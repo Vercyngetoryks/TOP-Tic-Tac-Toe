@@ -93,6 +93,31 @@ main {
   justify-content: center;
 }
 
+.game-box {
+  margin-top: 5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: 5rem;
+}
+
+.game-status {
+  width: 100%;
+  display: flex;
+  font-size: 4.8rem;
+  color: #fff;
+  justify-content: center;
+}
+
+.player-turn {
+  flex: 2;
+}
+.counter-p1,
+.counter-p2 {
+  flex: 1;
+}
+
 .init-input {
   font-size: 2rem;
   color: #fff;
@@ -157,13 +182,16 @@ main {
 
 .board {
   width: 40%;
-  align-self: center;
+  outline: 10px solid black;
+  outline-offset: 20px;
+  border-radius: 10px;
 }
 
 .board-cell {
   aspect-ratio: 1 / 1;
   font-size: 5rem;
   border: none;
+  border-radius: 10px;
   background: #e0e0e0;
   display: flex;
   align-items: center;
@@ -176,4 +204,55 @@ main {
 .board-cell:hover {
   box-shadow: inset -2px -2px 4px rgba(0, 0, 0, 0.5),
     inset 2px 2px 4px rgba(255, 255, 255, 0.5);
+}
+
+.board-cell:hover::after {
+  content: attr(data-marker);
+  color: gray;
+}
+
+.dialog {
+  text-align: center;
+  font-size: 3.6rem;
+  width: 30%;
+  min-width: 20rem;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 1rem;
+  background: white;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+.dialog::backdrop {
+  backdrop-filter: blur(5px);
+}
+
+.dialog-box {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+  padding: 2rem 0;
+}
+
+.dialog-btns {
+  display: flex;
+  justify-content: space-around;
+}
+
+.dialog-btns button {
+  padding: 1rem 1.5rem;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  transition: all 0.2s ease-in-out;
+}
+
+.dialog-btns button:hover {
+  transform: scale(1.05);
+  box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
 }

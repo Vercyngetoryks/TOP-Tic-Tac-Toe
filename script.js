@@ -23,16 +23,21 @@ function gameboard() {
     }
   };
 
-  const printBoard = () => {
+  const reset = () => {
     for (let i = 0; i < 3; i++) {
-      console.log(board[i].join("|"));
+      for (let j = 0; j < 3; j++) {
+        board[i][j] = "";
+      }
     }
   };
-  return { getBoard, placeMarker, printBoard };
+  return { getBoard, placeMarker, reset };
 }
 
 function gameController(playerOneName, playerTwoName, marker1, marker2) {
   const board = gameboard();
+
+  let counterP1 = 0;
+  let counterP2 = 0;
 
   const players = [
     {
@@ -51,13 +56,11 @@ function gameController(playerOneName, playerTwoName, marker1, marker2) {
     activePlayer = activePlayer === players[0] ? players[1] : players[0];
   };
 
-  const getActivePlayer = () => activePlayer;
+  const getCounterP1 = () => counterP1;
+  const getCounterP2 = () => counterP2;
 
-  const printNewRound = () => {
-    console.log(
-      `${activePlayer.name}'s round. ${activePlayer.name}, place your marker.`
-    );
-  };
+  const getActivePlayer = () => activePlayer;
+  const getPlayers = () => players;
 
   const checkWin = (board) => {
     for (let i = 0; i < 3; i++) {
@@ -105,27 +108,23 @@ function gameController(playerOneName, playerTwoName, marker1, marker2) {
     return true;
   };
 
-  printNewRound();
-  board.printBoard();
-
-  const playRound = () => {
-    const row = Number(prompt("Enter row no.:"));
-    const column = Number(prompt("Enter column no.:"));
-    if (board.placeMarker(row, column, activePlayer.marker)) {
+  const playRound = (row, column) => {
+    const result = board.placeMarker(row, column, activePlayer.marker);
+    if (result) {
       const win = checkWin(board.getBoard());
       const draw = checkDraw(board.getBoard());
       if (win) {
         console.log(`${activePlayer.name} wins the game!!!`);
-        return;
+        if (activePlayer.name === players[0].name) counterP1++;
+        else counterP2++;
+        return "win";
       }
       if (draw) {
         console.log("We have a draw!");
-        return;
+        return "draw";
       }
       switchPlayer();
-      printNewRound();
-      board.printBoard();
-    }
+    } else return "taken";
   };
 
   return {
@@ -134,24 +133,55 @@ function gameController(playerOneName, playerTwoName, marker1, marker2) {
     checkDraw,
     playRound,
     getActivePlayer,
+    reset: board.reset,
+    getCounterP1,
+    getCounterP2,
+    getPlayers,
   };
 }
 
 function screenController() {
   const form = document.querySelector(".init-input");
-  const board = document.querySelector(".board");
+  const boardDiv = document.querySelector(".board");
   const marker1 = document.getElementById("marker-p1");
   const marker2 = document.getElementById("marker-p2");
-  const cells = document.querySelectorAll(".board-cell");
+  const playerTurnDiv = document.querySelector(".player-turn");
+  const gameDiv = document.querySelector(".game-box");
+  const dialogBox = document.querySelector(".dialog");
+  const playerOneScore = document.querySelector(".counter-p1");
+  const playerTwoScore = document.querySelector(".counter-p2");
+  const updateScreen = () => {
+    boardDiv.textContent = "";
+    board.forEach((row, rowIndex) => {
+      row.forEach((cell, columnIndex) => {
+        const cellButton = document.createElement("button");
+        cellButton.classList.add("board-cell");
+        cellButton.dataset.row = rowIndex;
+        cellButton.dataset.column = columnIndex;
+        if (cell === "") {
+          cellButton.dataset.marker = game.getActivePlayer().marker;
+        } else {
+          cellButton.textContent = cell; // Jeśli zajęta, wyświetl marker
+        }
+        boardDiv.appendChild(cellButton);
+      });
+    });
+    cells = document.querySelectorAll(".board-cell");
+  };
   let playerOneName;
   let playerTwoName;
   let game;
+  let board;
+  let activePlayer;
+  let cells;
+
   form.addEventListener("click", (e) => {
     if (e.target.classList.contains("marker-select-btn")) {
       marker1.textContent = marker1.textContent === "O" ? "X" : "O";
       marker2.textContent = marker2.textContent === "X" ? "O" : "X";
     }
   });
+
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     playerOneName = document.getElementById("player1-name").value;
@@ -162,27 +192,64 @@ function screenController() {
       marker1.textContent.trim(),
       marker2.textContent.trim()
     );
+    board = game.getBoard();
+    activePlayer = game.getActivePlayer();
     form.classList.add("hidden");
-    board.classList.remove("hidden");
-    board.classList.add("grid");
-    console.log(game.getActivePlayer());
+    updateScreen();
+    playerTurnDiv.textContent = `${game.getActivePlayer().name}'s turn...`;
+    playerOneScore.textContent = `${
+      game.getPlayers()[0].name
+    }: ${game.getCounterP1()}`;
+    playerTwoScore.textContent = `${
+      game.getPlayers()[1].name
+    }: ${game.getCounterP2()}`;
+    gameDiv.classList.remove("hidden");
   });
-  cells.forEach((cell) =>
-    cell.addEventListener("mouseover", () => {
-      cell.textContent =
-        cell.textContent === ""
-          ? game.getActivePlayer().marker
-          : cell.textContent;
-    })
-  );
-  cells.forEach((cell) =>
-    cell.addEventListener("mouseout", () => {
-      cell.textContent = cell.textContent !== "" ? cell.textContent : "";
-    })
-  );
+
+  dialogBox.querySelector(".new-game").addEventListener("click", () => {
+    location.reload();
+  });
+  dialogBox.querySelector(".play-again").addEventListener("click", () => {
+    game.reset();
+    dialogBox.close();
+    updateScreen();
+    playerTurnDiv.textContent = `${game.getActivePlayer().name}'s turn...`;
+  });
+
+  function clickHandlerBoard(e) {
+    const selectedRow = Number(e.target.dataset.row);
+    const selectedColumn = Number(e.target.dataset.column);
+    if (!game.checkWin(game.getBoard()) && !game.checkDraw(game.getBoard())) {
+      const result = game.playRound(selectedRow, selectedColumn);
+      if (result === "win") {
+        updateScreen();
+        playerTurnDiv.textContent = `${
+          game.getActivePlayer().name
+        } wins the game!!`;
+        playerOneScore.textContent = `${
+          game.getPlayers()[0].name
+        }: ${game.getCounterP1()}`;
+        playerTwoScore.textContent = `${
+          game.getPlayers()[1].name
+        }: ${game.getCounterP2()}`;
+        dialogBox.querySelector(".game-result").textContent = `${
+          game.getActivePlayer().name
+        } wins!!`;
+        dialogBox.showModal();
+      } else if (result === "draw") {
+        updateScreen();
+        playerTurnDiv.textContent = "We have a draw!";
+        dialogBox.showModal();
+      } else if (result === "taken")
+        playerTurnDiv.textContent = "This field is taken! Choose another one";
+      else {
+        updateScreen();
+        playerTurnDiv.textContent = `${game.getActivePlayer().name}'s turn...`;
+      }
+    }
+  }
+
+  boardDiv.addEventListener("click", clickHandlerBoard);
 }
 
-// while (!game.checkWin(game.getBoard()) && !game.checkDraw(game.getBoard())) {
-//   game.playRound();
-// }
 screenController();

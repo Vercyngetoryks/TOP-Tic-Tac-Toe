@@ -40,17 +40,23 @@
           </div>
           <button class="play-btn" type="submit">Play!</button>
         </form>
-        <div class="board hidden">
-          <button class="board-cell" data-row="0">X</button
-          ><button class="board-cell" data-row="0"></button
-          ><button class="board-cell" data-row="0"></button
-          ><button class="board-cell" data-row="1"></button
-          ><button class="board-cell" data-row="1"></button
-          ><button class="board-cell" data-row="1"></button
-          ><button class="board-cell" data-row="2"></button
-          ><button class="board-cell" data-row="2"></button
-          ><button class="board-cell" data-row="2"></button>
+        <div class="game-box hidden">
+          <div class="game-status">
+            <span class="counter-p1"></span>
+            <div class="player-turn"></div>
+            <span class="counter-p2"></span>
+          </div>
+          <div class="board grid"></div>
         </div>
+        <dialog class="dialog">
+          <div class="dialog-box">
+            <div class="game-result"></div>
+            <div class="dialog-btns">
+              <button class="new-game btn">New game</button>
+              <button class="play-again btn">Play again</button>
+            </div>
+          </div>
+        </dialog>
       </div>
     </main>
   </body>
