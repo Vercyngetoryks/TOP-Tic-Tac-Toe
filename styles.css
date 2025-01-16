@@ -55,7 +55,7 @@ h6 {
   --secondary-color: #000;
 }
 
-@-webkit-keyframes glow {
+/* @-webkit-keyframes glow {
   from {
     text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e60013,
       0 0 40px #e60013, 0 0 50px #e60013, 0 0 60px #e60013, 0 0 70px #e60013;
@@ -64,7 +64,7 @@ h6 {
     text-shadow: 0 0 20px #fff, 0 0 30px #fc9621, 0 0 40px #fc9621,
       0 0 50px #fc9621, 0 0 60px #fc9621, 0 0 70px #fc9621, 0 0 80px #fc9621;
   }
-}
+} */
 
 header {
   font-size: 3.2rem;
@@ -77,7 +77,7 @@ header h1 {
   text-align: center;
   -webkit-animation: glow 1s ease-in-out infinite alternate;
   -moz-animation: glow 1s ease-in-out infinite alternate;
-  animation: glow 1s ease-in-out infinite alternate;
+  /* animation: glow 1s ease-in-out infinite alternate; */
 }
 
 main {
