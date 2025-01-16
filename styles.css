@@ -181,7 +181,7 @@ main {
 }
 
 .board {
-  width: 40%;
+  width: 60%;
   outline: 10px solid black;
   outline-offset: 20px;
   border-radius: 10px;
@@ -255,4 +255,52 @@ main {
 .dialog-btns button:hover {
   transform: scale(1.05);
   box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+}
+
+.footer {
+  background-color: var(--primary-color);
+  color: white;
+  text-align: center;
+  padding: 1rem;
+  font-size: 1.4rem;
+  height: 10vh;
+}
+
+.footer a {
+  color: #ffc107; /* Jasny żółty akcent */
+  text-decoration: none;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 1500px) {
+  .dialog {
+    width: 50%;
+  }
+}
+
+@media (max-width: 900px) {
+  .dialog {
+    width: 70%;
+  }
+}
+
+@media (max-width: 600px) {
+  .game-status {
+    font-size: 3rem;
+  }
+  .board {
+    width: 90%;
+  }
+  .dialog {
+    width: 90%;
+  }
+  .dialog-box {
+    font-size: 2rem;
+  }
+  .dialog-btns button {
+    padding: 0.5rem 1 rem;
+  }
 }

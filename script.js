@@ -18,7 +18,6 @@ function gameboard() {
       board[row][column] = marker;
       return true;
     } else {
-      console.log("This field is already taken! Choose another one!");
       return false;
     }
   };
@@ -114,13 +113,11 @@ function gameController(playerOneName, playerTwoName, marker1, marker2) {
       const win = checkWin(board.getBoard());
       const draw = checkDraw(board.getBoard());
       if (win) {
-        console.log(`${activePlayer.name} wins the game!!!`);
         if (activePlayer.name === players[0].name) counterP1++;
         else counterP2++;
         return "win";
       }
       if (draw) {
-        console.log("We have a draw!");
         return "draw";
       }
       switchPlayer();
@@ -239,6 +236,9 @@ function screenController() {
       } else if (result === "draw") {
         updateScreen();
         playerTurnDiv.textContent = "We have a draw!";
+        dialogBox.querySelector(
+          ".game-result"
+        ).textContent = `We have a draw!!`;
         dialogBox.showModal();
       } else if (result === "taken")
         playerTurnDiv.textContent = "This field is taken! Choose another one";
